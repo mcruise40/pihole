@@ -31,7 +31,7 @@ services:
 #    environment:
 #      - TZ: Europe/Zurich  # set desired timezone
     volumes:
-      - ${DNSCRYPT_DATA_PATH}/dnscrypt-proxy.toml:/usr/local/dnscrypt-proxy/dnscrypt-proxy.toml:ro
+      - ${DNSCRYPT_DATA_PATH}/dnscrypt-proxy.toml:/etc/dnscrypt-proxy/dnscrypt-proxy.toml:ro
     restart: unless-stopped
 
 
