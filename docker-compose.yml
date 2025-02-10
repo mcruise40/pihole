@@ -37,14 +37,14 @@ services:
 
 
 # dhcp-helper
-  dhcphelper:
-    container_name: dhcphelper
-    image: jauderho/dhcp-helper:latest
-    network_mode: "host"
-    command: -s 192.168.253.2
-    cap_add:
-      - NET_ADMIN
-    restart: unless-stopped
+#  dhcphelper:
+#    container_name: dhcphelper
+#    image: jauderho/dhcp-helper:latest
+#    network_mode: "host"
+#    command: -s 192.168.253.2
+#    cap_add:
+#      - NET_ADMIN
+#    restart: unless-stopped
 
   # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
   pihole:
