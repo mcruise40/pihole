@@ -41,7 +41,7 @@ services:
     container_name: dhcphelper
     image: dhcp-helper:latest
     network_mode: "host"
-    command: -s ${DHCP-HELPER_IPADDR}
+    command: -s 192.168.253.2
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
