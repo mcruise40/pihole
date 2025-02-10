@@ -1,0 +1,90 @@
+version: "3.5"
+
+services:
+
+# Stubby
+  stubby:
+    container_name: stubby
+    image: registry.gitlab.com/luckyturtledev/docker-stubby:latest
+    networks:
+      dns_net:
+        ipv4_address: 192.168.253.3
+        ipv6_address: 2001:3984:3989::30
+    expose:
+        - "53"
+    volumes:
+       - /mnt/user/appdata/stubby/stubby.yml:/etc/stubby/stubby.yml:ro
+    restart: unless-stopped
+
+
+# DNSCrypt
+  dnscrypt:
+    container_name: dnscrypt
+    image: dnscrypt-custom:v2.1.5
+    networks:
+      dns_net:
+        ipv4_address: 192.168.253.4
+        ipv6_address: 2001:3984:3989::40
+    expose:
+        - "5353"
+        - "53530"
+#    environment:
+#      - TZ: Europe/Zurich  # set desired timezone
+    volumes:
+      - /mnt/user/appdata/dnscrypt/dnscrypt-proxy.toml:/usr/local/dnscrypt-proxy/dnscrypt-proxy.toml:ro
+    restart: unless-stopped
+
+
+
+# dhcp-helper
+  dhcphelper:
+    container_name: dhcphelper
+    image: dhcp-helper:latest
+    network_mode: "host"
+    command: -s ${DHCP-HELPER_IPADDR}
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    networks:
+      dns_net:
+        ipv4_address: 192.168.253.2
+        ipv6_address: 2001:3984:3989::20
+    depends_on:
+     - stubby
+     - dnscrypt
+     - dhcphelper
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8080:80/tcp"
+    environment:
+      TZ: Europe/Zurich
+      WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
+      PIHOLE_DNS_: 192.168.253.3;192.168.253.4#5353;2001:3984:3989::20#53530
+      REV_SERVER: true
+      REV_SERVER_DOMAIN: hockeytown.ch
+      REV_SERVER_TARGET: ${PIHOLE_REV_SERVER_TARGET}
+      REV_SERVER_CIDR: ${PIHOLE_REV_SERVER_CIDR}
+      PIHOLE_DOMAIN: ${PIHOLE_DOMAIN}
+      VIRTUAL_HOST: ${PIHOLE_VHOST}
+      WEBTHEME: default-dark
+    # Volumes store your data between container upgrades
+    volumes:
+       - '/mnt/user/appdata/pihole:/etc/pihole/'
+       - '/mnt/user/appdata/dnsmasq:/etc/dnsmasq.d/'
+    dns:
+      - 127.0.0.1
+    restart: unless-stopped
+
+networks:
+  dns_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "192.168.253.0/24"
+        - subnet: "2001:3984:3989::/64"
