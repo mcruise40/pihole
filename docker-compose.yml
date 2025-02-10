@@ -57,7 +57,7 @@ services:
     depends_on:
      - stubby
      - dnscrypt
-     - dhcphelper
+#     - dhcphelper
     ports:
       - "53:53/tcp"
       - "53:53/udp"
