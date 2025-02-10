@@ -75,8 +75,8 @@ services:
       WEBTHEME: default-dark
     # Volumes store your data between container upgrades
     volumes:
-       - ${PIHOLE_DATA_PATH}:'/etc/pihole/'
-       - ${DNSMASQ_DATA_PATH}:'/etc/dnsmasq.d/'
+       - ${PIHOLE_DATA_PATH}:/etc/pihole/
+       - ${DNSMASQ_DATA_PATH}:/etc/dnsmasq.d/
     dns:
       - 127.0.0.1
     restart: unless-stopped
