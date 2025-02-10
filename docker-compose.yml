@@ -20,7 +20,7 @@ services:
 # DNSCrypt
   dnscrypt:
     container_name: dnscrypt
-    image: dnscrypt-custom:v2.1.5
+    image: dnscrypt-custom:latest
     networks:
       dns_net:
         ipv4_address: 192.168.253.4
