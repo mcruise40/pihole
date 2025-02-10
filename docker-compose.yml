@@ -13,7 +13,7 @@ services:
     expose:
         - "53"
     volumes:
-       - /mnt/user/appdata/stubby/stubby.yml:/etc/stubby/stubby.yml:ro
+       - ${STUBBY_DATA_PATH}/stubby.yml:/etc/stubby/stubby.yml:ro
     restart: unless-stopped
 
 
@@ -31,7 +31,7 @@ services:
 #    environment:
 #      - TZ: Europe/Zurich  # set desired timezone
     volumes:
-      - /mnt/user/appdata/dnscrypt/dnscrypt-proxy.toml:/usr/local/dnscrypt-proxy/dnscrypt-proxy.toml:ro
+      - ${DNSCRYPT_DATA_PATH}/dnscrypt-proxy.toml:/usr/local/dnscrypt-proxy/dnscrypt-proxy.toml:ro
     restart: unless-stopped
 
 
@@ -75,8 +75,8 @@ services:
       WEBTHEME: default-dark
     # Volumes store your data between container upgrades
     volumes:
-       - '/mnt/user/appdata/pihole:/etc/pihole/'
-       - '/mnt/user/appdata/dnsmasq:/etc/dnsmasq.d/'
+       - ${PIHOLE_DATA_PATH}:'/etc/pihole/'
+       - ${DNSMASQ_DATA_PATH}:'/etc/dnsmasq.d/'
     dns:
       - 127.0.0.1
     restart: unless-stopped
