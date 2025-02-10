@@ -39,7 +39,7 @@ services:
 # dhcp-helper
   dhcphelper:
     container_name: dhcphelper
-    image: dhcp-helper:latest
+    image: jauderho/dhcp-helper:latest
     network_mode: "host"
     command: -s 192.168.253.2
     cap_add:
