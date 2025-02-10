@@ -61,7 +61,7 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "8080:80/tcp"
+      - ${PIHOLE_PORT}:80/tcp
     environment:
       TZ: Europe/Zurich
       WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
